@@ -102,7 +102,6 @@ def main():
                 loader = TextLoader(temp_file_path)
             elif file_extension == ".docx" or file_extension == ".doc":
                 loader = Docx2txtLoader(temp_file_path)
-
             if loader:
                 text.extend(loader.load())
                 os.remove(temp_file_path)
