@@ -115,7 +115,9 @@ def main():
                 continue
 
         if text:
-            vector_store = FAISS.from_documents(text)
+            # Use your embedding model here
+            embedding_model = YourEmbeddingModel()
+            vector_store = FAISS.from_documents(text, embedding=embedding_model)
 
     chain = create_conversational_chain(vector_store)
     display_chat_history(chain)
