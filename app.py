@@ -85,7 +85,7 @@ def create_conversational_chain(vector_store=None):
 
 def main():
     initialize_session_state()
-    st.title("Multi-Docs Chatbot using LLama 3 📚")
+    st.title("Multi-Docs Chatbot using LLaMa 3 📚")
     st.sidebar.title("Document Processing")
     upload_files = st.sidebar.file_uploader("Upload files", accept_multiple_files=True)
     vector_store = None
