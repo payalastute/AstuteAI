@@ -54,7 +54,7 @@ def display_chat_history(chain):
     container = st.container()
     with container:
         with st.form(key="my_form", clear_on_submit=True):
-            user_input = st.text_input("Question:", placeholder="Ask about your documents")
+            user_input = st.text_area("Question:", placeholder="Ask about your documents", height=30)
             submit_button = st.form_submit_button(label="Send")
         if submit_button and user_input:
             with st.spinner("Generating response..."):
@@ -79,6 +79,8 @@ def create_conversational_chain(vector_store=None):
     else:
         chain = ConversationChain(llm=llm, memory=memory)
     return chain
+
+
 
 def main():
     initialize_session_state()
