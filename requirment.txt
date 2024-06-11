@@ -1,4 +1,4 @@
 streamlit_chat
 langchain
-dotenv
 pymongo
+PyPDF2
