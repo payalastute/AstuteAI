@@ -102,16 +102,11 @@ def main():
                 loader = Docx2txtLoader(file)
 
             if loader:
-                try:
-                    text.extend(loader.load())
-                except Exception as e:
-                    st.error(f"Error loading {file.name}: {str(e)}")
+                text.extend(loader.load())
 
-            if text:
-                vector_store = FAISS.from_documents(text)
-            chain = create_conversational_chain(vector_store)
-            display_chat_history(chain)
-
+        vector_store = FAISS.from_documents(text)
+    chain = create_conversational_chain(vector_store)
+    display_chat_history(chain)
 
 if __name__ == "__main__":
     main()
