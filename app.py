@@ -12,6 +12,7 @@ from langchain.document_loaders import PyPDFLoader, CSVLoader, TextLoader, Docx2
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 import os
 # from dotenv import load_dotenv
+from langchain.embeddings import YourEmbeddingModel  # Import your embedding model
 import tempfile
 from pymongo import MongoClient
 from datetime import datetime
