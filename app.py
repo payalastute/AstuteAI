@@ -12,11 +12,10 @@ from langchain.document_loaders import PyPDFLoader, CSVLoader, TextLoader, Docx2
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 import os
 # from dotenv import load_dotenv
-from langchain.embeddings import YourEmbeddingModel  # Import your embedding model
 import tempfile
 from pymongo import MongoClient
 from datetime import datetime
-
+from langchain.embeddings import MyCustomEmbeddingModel
 
 
 # Initialize MongoDB client
@@ -117,11 +116,12 @@ def main():
 
         if text:
             # Use your embedding model here
-            embedding_model = MyCustomEmbedding()
+            embedding_model = MyCustomEmbeddingModel()
             vector_store = FAISS.from_documents(text, embedding=embedding_model)
 
     chain = create_conversational_chain(vector_store)
     display_chat_history(chain)
+
 
 if __name__ == "__main__":
     main()
