@@ -89,8 +89,8 @@ def main():
     st.sidebar.title("Document Processing")
     upload_files = st.sidebar.file_uploader("Upload files", accept_multiple_files=True)
     vector_store = None
+    text = []
     if upload_files:
-            text = []
             for file in upload_files:
                 file_extension = os.path.splitext(file.name)[1]
                 with tempfile.NamedTemporaryFile(delete=False) as temp_file:
