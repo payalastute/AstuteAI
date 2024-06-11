@@ -99,8 +99,13 @@ def main():
                 with tempfile.NamedTemporaryFile(delete=False) as temp_file:
                     temp_file.write(file.read())
                     temp_file_path = temp_file.name
-                loader = CSVLoader(temp_file_path)
-                os.remove(temp_file_path)  # Remove the temporary file after loading
+                try:
+                    loader = CSVLoader(temp_file_path)
+                    text.extend(loader.load())
+                except Exception as e:
+                    st.error(f"Error loading CSV file: {str(e)}")
+                finally:
+                    os.remove(temp_file_path)  # Remove the temporary file after loading
             elif file_extension == ".txt":
                 loader = TextLoader(file)
             elif file_extension == ".docx" or file_extension == ".doc":
@@ -109,11 +114,12 @@ def main():
                 st.warning(f"Unsupported file format: {file_extension}")
                 continue
 
-            text.extend(loader.load())
+        if text:
+            vector_store = FAISS.from_documents(text)
 
-        vector_store = FAISS.from_documents(text)
     chain = create_conversational_chain(vector_store)
     display_chat_history(chain)
+
 
 if __name__ == "__main__":
     main()
