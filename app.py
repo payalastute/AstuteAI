@@ -88,8 +88,31 @@ def main():
     st.title("Multi-Docs Chatbot using LLaMa 3 📚")
     st.sidebar.title("Document Processing")
     upload_files = st.sidebar.file_uploader("Upload files", accept_multiple_files=True)
-    chain = create_conversational_chain()
-    display_chat_history(chain)
+    chain = None
+    if upload_files:
+        text = []
+        for file in upload_files:
+            file_extension = os.path.splitext(file.name)[1]
+            with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+                temp_file.write(file.read())
+                temp_file_path = temp_file.name
+            loader = None
+            if file_extension == ".pdf":
+                loader = PyPDFLoader(temp_file_path)
+            elif file_extension == ".csv":
+                loader = CSVLoader(temp_file_path)
+            elif file_extension == ".txt":
+                loader = TextLoader(temp_file_path)
+            elif file_extension == ".docx" or file_extension == ".doc":
+                loader = Docx2txtLoader(temp_file_path)
+
+            if loader:
+                text.extend(loader.load())
+                os.remove(temp_file_path)
+        chain = create_conversational_chain(text)
+
+    if chain:
+        display_chat_history(chain)
 
 if __name__ == "__main__":
     main()
