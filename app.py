@@ -15,7 +15,7 @@ import os
 import tempfile
 from pymongo import MongoClient
 from datetime import datetime
-from langchain.embeddings import MyCustomEmbeddingModel
+
 
 
 # Initialize MongoDB client
@@ -95,33 +95,18 @@ def main():
             if file_extension == ".pdf":
                 loader = PyPDFLoader(file)
             elif file_extension == ".csv":
-                # Save the uploaded file to a temporary directory and get the file path
-                with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-                    temp_file.write(file.read())
-                    temp_file_path = temp_file.name
-                try:
-                    loader = CSVLoader(temp_file_path)
-                    text.extend(loader.load())
-                except Exception as e:
-                    st.error(f"Error loading CSV file: {str(e)}")
-                finally:
-                    os.remove(temp_file_path)  # Remove the temporary file after loading
+                loader = CSVLoader(file)
             elif file_extension == ".txt":
                 loader = TextLoader(file)
             elif file_extension == ".docx" or file_extension == ".doc":
                 loader = Docx2txtLoader(file)
-            else:
-                st.warning(f"Unsupported file format: {file_extension}")
-                continue
 
-        if text:
-            # Use your embedding model here
-            embedding_model = MyCustomEmbeddingModel()
-            vector_store = FAISS.from_documents(text, embedding=embedding_model)
+            if loader:
+                text.extend(loader.load())
 
+        vector_store = FAISS.from_documents(text)
     chain = create_conversational_chain(vector_store)
     display_chat_history(chain)
-
 
 if __name__ == "__main__":
     main()
