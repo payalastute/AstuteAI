@@ -11,7 +11,6 @@ from langchain.memory import ConversationBufferMemory
 from langchain.document_loaders import PyPDFLoader, CSVLoader, TextLoader, Docx2txtLoader
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 import os
-import PyPDF2
 
 # from dotenv import load_dotenv
 import tempfile
