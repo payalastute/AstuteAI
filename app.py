@@ -117,12 +117,11 @@ def main():
 
         if text:
             # Use your embedding model here
-            embedding_model = YourEmbeddingModel()
+            embedding_model = MyCustomEmbedding()
             vector_store = FAISS.from_documents(text, embedding=embedding_model)
 
     chain = create_conversational_chain(vector_store)
     display_chat_history(chain)
-
 
 if __name__ == "__main__":
     main()
