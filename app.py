@@ -95,7 +95,12 @@ def main():
             if file_extension == ".pdf":
                 loader = PyPDFLoader(file)
             elif file_extension == ".csv":
-                loader = CSVLoader(file)
+                # Save the uploaded file to a temporary directory and get the file path
+                with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+                    temp_file.write(file.read())
+                    temp_file_path = temp_file.name
+                loader = CSVLoader(temp_file_path)
+                os.remove(temp_file_path)  # Remove the temporary file after loading
             elif file_extension == ".txt":
                 loader = TextLoader(file)
             elif file_extension == ".docx" or file_extension == ".doc":
