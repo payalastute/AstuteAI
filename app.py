@@ -105,7 +105,9 @@ def main():
             if loader:
                 text.extend(loader.load())
 
-        vector_store = FAISS.from_documents(text)
+        text_splitter = CharacterTextSplitter(separator="\n", chunk_size=10000, chunk_overlap=1000, length_function=len)
+        text_chunks = text_splitter.split_documents(text)
+        vector_store = FAISS.from_documents(text,text_chunks)
     chain = create_conversational_chain(vector_store)
     display_chat_history(chain)
 
