@@ -41,6 +41,19 @@ def save_to_mongodb(user_input, bot_response):
     # collection.insert_one(chat_entry)
     pass
 
+
+# def format_response(user_input, response):
+#     key_points = response.split('\n')[:3]
+#
+#     formatted_response = (
+#         f"Question: {user_input}\n"
+#         f"Answer:\n"
+#         f"- Key Point 1: {key_points[0] if len(key_points) > 0 else 'N/A'}\n"
+#         f"- Key Point 2: {key_points[1] if len(key_points) > 1 else 'N/A'}\n"
+#         f"- Key Point 3: {key_points[2] if len(key_points) > 2 else 'N/A'}"
+#     )
+#     return formatted_response
+
 def conversation_chat(query, chain, history):
     result = chain({"input": query, "history": history})
     # print(result)
@@ -86,36 +99,36 @@ def main():
     initialize_session_state()
     st.title("Multi-Docs Chatbot using LLama 3 📚")
     st.sidebar.title("Document Processing")
-    upload_files = st.sidebar.file_uploader("Upload files", accept_multiple_files=True)
-    vector_store = None
-    if upload_files:
-        text = []
-
-        for file in upload_files:
-                file_extension = os.path.splitext(file.name)[1]
-                with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-                    temp_file.write(file.read())
-                    temp_file_path = temp_file.name
-                loader = None
-                if file_extension == ".pdf":
-                    loader = PyPDFLoader(temp_file_path)
-                elif file_extension == ".csv":
-                    loader = CSVLoader(temp_file_path)
-                elif file_extension == ".txt":
-                    loader = TextLoader(temp_file_path)
-                elif file_extension == ".docx" or file_extension == ".doc":
-                    loader = Docx2txtLoader(temp_file_path)
-
-                if loader:
-                    text.extend(loader.load())
-                    os.remove(temp_file_path)
-
-
-        text_splitter = CharacterTextSplitter(separator="\n", chunk_size=10000, chunk_overlap=1000, length_function=len)
-        text_chunks = text_splitter.split_documents(text)
-        # embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2", model_kwargs={'device': "cpu"})
-        vector_store = FAISS.from_documents(text_chunks)
-    chain = create_conversational_chain(vector_store)
+    # upload_files = st.sidebar.file_uploader("Upload files", accept_multiple_files=True)
+    # vector_store = None
+    # if upload_files:
+    #     text = []
+    #
+    #     for file in upload_files:
+    #             file_extension = os.path.splitext(file.name)[1]
+    #             with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+    #                 temp_file.write(file.read())
+    #                 temp_file_path = temp_file.name
+    #             loader = None
+    #             if file_extension == ".pdf":
+    #                 loader = PyPDFLoader(temp_file_path)
+    #             elif file_extension == ".csv":
+    #                 loader = CSVLoader(temp_file_path)
+    #             elif file_extension == ".txt":
+    #                 loader = TextLoader(temp_file_path)
+    #             elif file_extension == ".docx" or file_extension == ".doc":
+    #                 loader = Docx2txtLoader(temp_file_path)
+    #
+    #             if loader:
+    #                 text.extend(loader.load())
+    #                 os.remove(temp_file_path)
+    #
+    #
+    #     text_splitter = CharacterTextSplitter(separator="\n", chunk_size=10000, chunk_overlap=1000, length_function=len)
+    #     text_chunks = text_splitter.split_documents(text)
+    #     # embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2", model_kwargs={'device': "cpu"})
+    #     vector_store = FAISS.from_documents(text_chunks)
+    chain = create_conversational_chain('')
     display_chat_history(chain)
 
 
